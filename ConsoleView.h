@@ -7,8 +7,7 @@
 #define ROW_FIT_COUNT 8 // HEIGHT/FONT_SIZE
 #define CHARS_IN_ROW 16 // WIDTH/FONT_SIZE
 
-class ConsoleView
-{
+class ConsoleView {
 public:
   ConsoleView(SSD1306* display);
   void draw(void);

@@ -29,16 +29,15 @@ Credits for parts of this code go to Mike Rankin. Thank you so much for sharing!
 #include <Wire.h>
 #include "font.h"
 
-SSD1306::SSD1306(int i2cAddress, int sda, int sdc)
+SSD1306::SSD1306(TwoWire* twoWire, int i2cAddress)
 {
+  mTwoWire = twoWire;
   myI2cAddress = i2cAddress;
-  mySda = sda;
-  mySdc = sdc;  
 }
 
 void SSD1306::init() {
-  Wire.begin(mySda, mySdc);
-  Wire.setClock(400000); 
+  //mTwoWire->begin(mySda, mySdc);
+  //mTwoWire->setClock(400000); 
   sendInitCommands();
   resetDisplay();
 }
@@ -49,10 +48,6 @@ void SSD1306::resetDisplay(void)
   clear();
   display();
   displayOn();
-}
-
-void SSD1306::reconnect() {
-  Wire.begin(mySda, mySdc);  
 }
 
 void SSD1306::displayOn(void)
@@ -82,16 +77,16 @@ void SSD1306::display(void) {
 
     for (uint16_t i=0; i<(128*64/8); i++) {
       // send a bunch of data in one xmission
-      //Wire.begin(mySda, mySdc);
-      Wire.beginTransmission(myI2cAddress);
-      Wire.write(0x40);
+      //mTwoWire->begin(mySda, mySdc);
+      mTwoWire->beginTransmission(myI2cAddress);
+      mTwoWire->write(0x40);
       for (uint8_t x=0; x<16; x++) {
-        Wire.write(buffer[i]);
+        mTwoWire->write(buffer[i]);
         i++;
       }
       i--;
       yield();
-      Wire.endTransmission();
+      mTwoWire->endTransmission();
     }
 
 
@@ -195,11 +190,11 @@ void SSD1306::drawXbm(int x, int y, int width, int height, const char *xbm) {
 
 void SSD1306::sendCommand(unsigned char com)
 {
-  //Wire.begin(mySda, mySdc);
-  Wire.beginTransmission(myI2cAddress);     //begin transmitting
-  Wire.write(0x80);                          //command mode
-  Wire.write(com);
-  Wire.endTransmission();                    // stop transmitting
+  //mTwoWire->begin(mySda, mySdc);
+  mTwoWire->beginTransmission(myI2cAddress);     //begin transmitting
+  mTwoWire->write(0x80);                          //command mode
+  mTwoWire->write(com);
+  mTwoWire->endTransmission();                    // stop transmitting
 }
 
 void SSD1306::sendInitCommands(void)

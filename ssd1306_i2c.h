@@ -29,6 +29,7 @@ Credits for parts of this code go to Mike Rankin. Thank you so much for sharing!
 #define SSD1306_I2C_H
 
 #include <Arduino.h>
+#include <Wire.h>
 
 #define BLACK 0
 #define WHITE 1
@@ -38,12 +39,12 @@ Credits for parts of this code go to Mike Rankin. Thank you so much for sharing!
 #define HEIGHT 64
 #define FONT_SIZE 8
 
+#define SSD1306_ADDR 0x3C
+
 class SSD1306 {
 
 private:
    int myI2cAddress;
-   int mySda;
-   int mySdc;
    uint8_t buffer[WIDTH * HEIGHT / FONT_SIZE];
    bool myIsFontScaling2x2 = false;
    int myFrameState = 0;
@@ -54,14 +55,13 @@ private:
    int myFrameTransitionTicks = 25;
    int myColor = WHITE;
    void (**myFrameCallbacks)(int x, int y);
-
+   TwoWire *mTwoWire;
    
 public:
    // Empty constructor
-   SSD1306(int i2cAddress, int sda, int sdc);
+   SSD1306(TwoWire* twoWire, int i2cAddress = SSD1306_ADDR);
    void init();
    void resetDisplay(void);
-   void reconnect(void);
    void displayOn(void);
    void displayOff(void);
    void clear(void);
