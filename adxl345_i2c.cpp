@@ -48,7 +48,7 @@ void ADXL345::read(byte addr, int toRead, byte* buf){
   mTwoWire->endTransmission();
 }
 
-double ADXL345::covertRawToGen(short val){
+double ADXL345::convertRawToGen(short val){
   return val * 2. / 512.; //where 2. = Range; 512. = 2 ^ (Resolution - 1)
 }
 
@@ -69,9 +69,9 @@ RawXYZ ADXL345::getRaw(){
 GenXYZ ADXL345::getGeneralized(){
   RawXYZ raw = getRaw();
   GenXYZ gen;
-  gen.x = covertRawToGen(raw.x);
-  gen.y = covertRawToGen(raw.y);
-  gen.z = covertRawToGen(raw.z);
+  gen.x = convertRawToGen(raw.x);
+  gen.y = convertRawToGen(raw.y);
+  gen.z = convertRawToGen(raw.z);
   return gen;
 }
 

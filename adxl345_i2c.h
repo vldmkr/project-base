@@ -3,9 +3,9 @@
 
 #include <Arduino.h>
 
-#define ADXL345_ADDR   (0x53)
+#define ADXL345_ADDR  (0x53)
 
-#define POWER_CTL    0x2D
+#define POWER_CTL     0x2D
 #define DATA_FORMAT   0x31
 #define DATAX0        0x32
 #define DATAX1        0x33
@@ -55,7 +55,7 @@ private:
 
   void write(byte addr, byte value);
   void read(byte addr, int toRead, byte* buf);
-  double covertRawToGen(short val);
+  double convertRawToGen(short val);
 };
 
 #endif //ADXL345_I2C_H
